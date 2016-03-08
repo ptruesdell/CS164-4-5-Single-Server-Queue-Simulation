@@ -16,6 +16,7 @@ int totalArrivals
 def generateArrival(lam):
 	# Non-homogenous Poisson distribution
 	ta = numpy.random.poisson(lam, 10000)
+	totalArrivals += 1
 
 
 def generateDepartureTime():
@@ -34,4 +35,4 @@ def getItemsInCart(line):
 # Main loop
 def runSimulation():
 	while (True):
-		totalArrivals += 1
+		
