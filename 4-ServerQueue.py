@@ -34,4 +34,4 @@ def getItemsInCart(line):
 # Main loop
 def runSimulation():
 	while (True):
-		
+		totalArrivals += 1
