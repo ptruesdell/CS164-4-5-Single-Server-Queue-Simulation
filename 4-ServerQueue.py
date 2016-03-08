@@ -1,5 +1,7 @@
-import math #math library
+import math
 import random
+import support
+import SingleServer
  
 # Random variable library for generating random variables
 import numpy
@@ -32,7 +34,13 @@ def getTime():
 def getItemsInCart(line):
 	# Return number of items in customer's cart in a given line
 
+def getEstimatedLineSize():
+
+
 # Main loop
 def runSimulation():
 	while (True):
+		# Case 1:
+		if ((ta <= td) and (ta < tc)):
+
 		
