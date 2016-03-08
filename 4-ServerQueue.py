@@ -1,6 +1,6 @@
-import math
+import math #math library
 import random
-
+ 
 # Random variable library for generating random variables
 import numpy
 
