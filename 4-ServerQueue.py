@@ -7,12 +7,6 @@ import random
 a_jillion = 100000.0
 a_kajillion = 10.0 * a_jillion
 
-listy = list()
-print listy
-x = 6
-listy.append(x)
-print len(listy)
-
 
 # Current time variable
 t = 0.0
@@ -55,30 +49,28 @@ switchLam = 0.8
 
 # Generates arrival time, along with number of items in cart
 def generateArrivalTime():
+	global t
 	# Non-homogenous Poisson distribution
 	# random variable u
 	u = random.random()
 	# Set New Arrival time to exponential equation
 	Y = (-lam) * math.log(1 - u)
-	return (Y + t)
+	return Y + t
 
 
 # TODO: change to weibull
 def generateDepartureTime():
+	global t
 	# If customer is at the front of the line -> generate departure time using weibull dist.
 	u = random.random()
 	Y = (-lam) * math.log(1 - u)
-	return (Y + t)
+	return Y + t
 
 # Exponential
 def generateSwitchTime():
 	u = random.random()
 	Y = (-switchLam) * math.log(1 - u)
 	return (Y + t)
-
-def updateTime(eventTime):
-	# Adds event time to current time
-	t += eventTime
 
 #Parker
 def getItemsInCart(line):
@@ -109,65 +101,23 @@ def getEstimatedWaitTime(line):
 # Return value is the line that the customer chooses
 def chooseLine():
 
-	lists = list()
-	Minimums = 0
+	global line1, line2, line3, line4
 
-	if (getShortestLine() == getEstimatedWaitTime(line1)):
-		Minimums += 1
-		lists.append(line1) #List of lists is called 'lists', keeps track of lines tied for shortest
-	if (getShortestLine() == getEstimatedWaitTime(line2)):
-		Minimums += 1
-		lists.append(line2)
-	if (getShortestLine() == getEstimatedWaitTime(line3)):
-		Minimums += 1
-		lists.append(line3)
-	if (getShortestLine() == getEstimatedWaitTime(line4)):
-		Minimums += 1
-		lists.append(line4)
-	if (Minimums == 2):
-		u = random.random()
-		if (u <= 0.5):
-			return lists[0]
-		else: 
-			return lists[1]
-	if (Minimums == 3):
-		u = random.random()
-		if (u <= .3333):
-			return lists[0]
-		elif (u > .3333 and u < .66667):
-			return lists[1]
-		else:
-			return lists[2]
-	if (Minimums == 4):
-		u = random.random()
-		if (u <= .25):
-			return lists[0]
-		elif (u > .25 and u <= .5):
-			return lists[1]
-		elif (u > .5 and u <= .75):
-			return lists[2]
-		else:
-			return lists[3]
+	if min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line1):
+		print "Line 1 chosen"
+		return 1
+	elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line2):
+		print "Line 2 chosen"
+		return 2
+	elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line3):
+		"Line 3 chosen"
+		return 3
+	else:
+		print "Line 4 chosen"
+		return 4
 
-		if min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line1):
-			print "line 1 chosen"
-			return line1
-		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line2):
-			print "line 2 chosen"
-			return line2
-		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line3):
-			"line 3 chosen"
-			return line3
-		else:
-			print "line 4 chosen"
-			return line4
-
-# Returns the soonest deparature time among all the lines
-def getNextDepartureTime():
-	return min(td1, td2, td3, td4)
-
-# Returns time of next event
 def getNextEvent():
+	global ta, td1, td2, td3, td4
 	return min(ta, td1, td2, td3, td4)
 
 def getLongestLine():
@@ -179,147 +129,147 @@ def getShortestLine():
 def getShortestLineSwitch(line):
 	return min(getEstimatedWaitTime(line), getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
 
+def printTime():
+	global t
+	print "Current time:", t
+
+def printNumCustomersInLine():
+	global line1, line2, line3, line4
+	print "# of customers in line 1:", len(line1)
+	print "# of customers in line 2:", len(line2)
+	print "# of customers in line 3:", len(line3)
+	print "# of customers in line 4:", len(line4)
+
+def printDepartureTime(line):
+	if (cmp(line, line1)):
+		print "Line 1 Departure Time:", td1
+	elif (cmp(line, line2)):
+		print "Line 2 Departure Time:", td2
+	elif (cmp(line, line3)):
+		print "Line 3 Departure Time:", td3
+	elif (cmp(line, line4)):
+		print "Line 4 Departure Time:", td4
 
 # Main loop
 def runSimulation():
 
+	global t, ta, td1, td2, td3, td4, ts, tc
+	global line1, line2, line3, line4
+	global totalArrivals, lam, cartSizeLam
+
 	# Initialize first arrival time
 	ta = generateArrivalTime()
 
-	# Global Variables:
-
-	a_jillion = 100000
-	a_kajillion = 10 * a_jillion
-
-	# Current time variable
-	t = 0.0
-
-	# Time of line switch
-	ts = a_jillion
-
-	ta = 0.0
-
-	# Departure times for 4-server
-	td1 = a_jillion
-	td2 = a_jillion
-	td3 = a_jillion
-	td4 = a_jillion
-
-	# Closing time variable
-	tc = 100.0
-
-	# Initialize line lists
-	# Line lists will contain customers represented by an integer number of items in cart
-	line1 = list()
-	line2 = list()
-	line3 = list()
-	line4 = list()
-
-	# Total number of customer arrivals throughout the day
-	totalArrivals = 0
-
-	# Initialize r.v. generation parameters
-
-	# Arrival time parameter
-	longLineSize = 1
-
-	# Cart size parameter
-	cartSizeLam = 0.5
-
-	switchLam = 0.8
-
-
-	while (True):
-		# Case 1 (Arrival ocurrs before departure from any line and before closing):
+	while (t < tc):
+		# Case 1 (Arrival occurs before departure from any line and before closing):
 		if (getNextEvent() == ta and ta < tc):
 
 			# Update current time by time of arrival
 			t = ta
-			print "first arrival time"
-			print ta
+			printTime()
 
 			# Increment total arrivals by 1
 			totalArrivals += 1
 
 			# Add customer to "shortest" line
 			items = generateItemsInCart()
-			activeList = list(chooseLine())
-			chooseLine().append(items)
+			if (chooseLine() == 1):
+				line1.append(items)
+			elif (chooseLine() == 2):
+				line2.append(items)
+			elif (chooseLine() == 3):
+				line3.append(items)
+			else:
+				line4.append(items)
+
+			printNumCustomersInLine()
 
 			# Generate and set new arrival time
 			ta = generateArrivalTime()
-			print ta
+			print "Next arrival time:", ta
 
-			print len(chooseLine())
+			if (len(line1) == 1):
+				td1 = generateDepartureTime()
+				print "Line 1 Departure Time:", td1
+			elif (len(line2) == 1):
+				td2 = generateDepartureTime()
+				print "Line 2 Departure Time:", td2
+			elif (len(line2) == 1):
+				td3 = generateDepartureTime()
+				print "Line 3 Departure Time:", td3
+			elif (len(line4) == 1):
+				td4 = generateDepartureTime()
+				print "Line 4 Departure Time:", td4
 
-			if (len(activeLine())==1):
-				if (cmp(chooseLine(), line1) == True):
-					td1 = generateDepartureTime()
-					print "line 1: " + td1
-				elif (cmp(chooseLine(), line2) == True):
-					td2 = generateDepartureTime()
-					print "line 2: " + td2
-				elif (cmp(chooseLine(), line3) == True):
-					td3 = generateDepartureTime()
-					print "line 3: " + td3
-				else:
-					td4 = generateDepartureTime()
-					print "line 4 : " + td4
+			print "Next event time:", getNextEvent()
+			t = getNextEvent()
+			printTime()
 
-			print line1
-			print line2
-			print line3
-			print line4
-
-			print t
-
-		# Cases 2-5 (Departure from one of the lines ocurrs before new arrival and before closing):
+		# Case 2 (Departure from line 1):
 		elif (getNextEvent() == td1 and td1 < tc):
 
-			# Update current time by earliest deparature time
+			# Update current time by earliest departure time
 			t = td1
+			printTime()
 
 			# Remove departed customer from line with earliest departure time
-			line1.pop()
+			line1.pop(0)
+			printNumCustomersInLine()
+
 
 			if (len(line1) > 0):
 				td1 = generateDepartureTime()
 			else: 
 				td1 = a_jillion
 
+		# Case 3 (Departure from line 2):
 		elif (getNextEvent() == td2 and td2 < tc):
 
 			# Update current time by earliest deparature time
 			t = td2
+			printTime()
+
 
 			# Remove departed customer from line with earliest departure time
-			line2.pop()
+			line2.pop(0)
+
+			printNumCustomersInLine()
+
 
 			if (len(line2) > 0):
 				td2 = generateDepartureTime()
 			else: 
 				td2 = a_kajillion
 
+		# Case 4 (Departure from line 3):
 		elif (getNextEvent() == td3 and td3 < tc):
 
 			# Update current time by earliest deparature time
 			t = td3
+			printTime()
 
 			# Remove departed customer from line with earliest departure time
-			line3.pop()
+			line3.pop(0)
+
+			printNumCustomersInLine()
+
 
 			if (len(line3) > 0):
 				td3 = generateDepartureTime()
 			else: 
 				td3 = a_jillion
 
+		# Case 5 (Departure from line 4):
 		elif (getNextEvent() == td4 and td4 < tc):
 
-			# Update current time by earliest deparature time
+			# Update current time by earliest departure time
 			t = td4
+			printTime()
 
 			# Remove departed customer from line with earliest departure time
-			line4.pop()
+			line4.pop(0)
+
+			printNumCustomersInLine()
 
 			if (len(line4) > 0):
 				td4 = generateDepartureTime()
@@ -327,43 +277,72 @@ def runSimulation():
 				td4 = a_jillion
 
 
-		"""elif (getNextEvent() == ts and ts < tc):
-			longLineSize = len(getLongestLine())
+		# Case 7 (Next departure happens after closing and at least one customer is still in line)
+		elif ((tc < getNextEvent()) and ((len(line1) + len(line2) + len(line3) + len(line4)) > 0)):
 
-			longestLine = list(getLongestLine())
+			# Keep out new arrivals
+			ta = a_kajillion
 
-	        lastInLineIndex = longestLine[longLineSize - 1]   
+			t = getNextEvent()
+			if (getNextEvent() == td1 and len(line1) > 0):
+				line1.pop(0)
+				td1 = generateDepartureTime()
+			
+			elif (getNextEvent() == td2 and len(line2) > 0):
+				line2.pop(0)
+				td2 = generateDepartureTime()
 
-	        temp = list(getLongestLine())
+			elif (getNextEvent() == td3 and len(line3) > 0):
+				line3.pop(0)
+				td3 = generateDepartureTime()
 
-	        del temp[longLineSize-1]       
+			elif (getNextEvent() == td4 and len(line4) > 0):
+				line4.pop(0)
+				td4 = generateDepartureTime()
+				
+
+		# Case 8 (Closing time is earlier than next departure and all lines are empty):	
+		elif (tc < getNextEvent() and ((len(line1) + len(line2) + len(line3) + len(line4)) == 0)):
+			printTime()
+			print "Total arrivals for the day:", totalArrivals
+			# print any other necessary data
+			# End the loop
+			break
+
+		print "Total Arrivals", totalArrivals
+		print "# of remaining customers:", (len(line1) + len(line2) + len(line3) + len(line4))
+
+
+runSimulation()
+
+'''
+# Case 6 (Line switch):
+		elif (getNextEvent() == ts and ts < tc):
+			maxLineLength = max(len(line1), len(line2), len(line3), len(line4))
+
+			# Set longest line
+			if (maxLineSize == len(line1)):
+				longestLine = line1
+			elif (maxLineSize == len(line2)):
+				longestLine = line2
+			elif (maxLinesize == len(line3)):
+				longestLine = line3
+			else:
+				longestLine = line4
+
+	        lastInLineIndex = longestLine[maxLineSize - 1]   
+
+	        # Makes a temporary copy of the longest line list
+	        temp = list(longestLine)
+
+	        # Remove last person from temp line
+	        del temp[maxLineSize-1]       
 	        
 	        if(cmp(temp, getShortestLineSwitch(temp)) == False): 
 	        	getSmallestLine().push(lastInLineIndex)
 	       	
 	        t = ts
-	        ts = generateSwitchTime()"""
-
-		# Case 6 (Next departure happens after closing and at least one customer is still in line)
-		if (lam == 10.0):
-
-			# Keep out new arrivals
-			ta = a_kajillion
-
-			tc = 10000
-
-		# Case 7 (Closing time is earlier than next departure and all lines are empty):	
-		elif ((tc < getNextEvent()) and () == 0):
-
-			print t
-			print totalArrivals
-			# print any other necessary data
-
-			# End the loop
-			break
-
-
-#runSimulation()
+	        ts = generateSwitchTime()'''
 
 
 
