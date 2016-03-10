@@ -9,9 +9,6 @@ import random
 # Current time variable
 t = 0.0
 
-# Initialize first arrival time
-ta = generateArrivalTime()
-
 # Time of line switch
 ts = 0.0
 
@@ -59,8 +56,15 @@ cartSizeLam = 0.5
 # Generates arrival time, along with number of items in cart
 def generateArrivalTime(lam):
 	# Non-homogenous Poisson distribution
-	ta = t + numpy.random.poisson(lam, 10000)
-	totalArrivals += 1
+	# random variable u
+	u = random.random()
+	# Set New Arrival time to exponential equation
+	Y = (-lam) * math.log(1 - u)
+	ta = Y + t
+	return ta
+
+# Initialize first arrival time
+ta = generateArrivalTime(lam)
 
 #Parker
 #def generateDepartureTime():
@@ -91,7 +95,7 @@ def generateItemsInCart():
 	return math.ceil(40*(-cartSizeLam)*math.log(1 - u))
 
 #Eric
-def getEstimatedWaitTime(line):
+#def getEstimatedWaitTime(line):
 	# Returns line (which is a list)
 
 # Returns shortest estimated line
@@ -143,8 +147,6 @@ def getNextEvent():
 
 def getLongestLine():
 	return max(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
-
-getShortestLine():
 
 # Main loop
 def runSimulation():
@@ -214,7 +216,8 @@ def runSimulation():
 				# update state variable for number of people in this line (?)
 
 
-		elif (ts < ta) and ts < getNextDepartureTime
+		elif ((ts < ta) and ts < getNextDepartureTime()):
+			return
 
 		# Case 6 (Next departure happens after closing and at least one customer is still in line)
 		elif ((tc < getNextDepartureTime()) and (n1 + n2 + n3 + n4) != 0):
@@ -235,7 +238,7 @@ def runSimulation():
 			# End the loop
 			break
 
-print generateItemsInCart()
+print generateArrivalTime(lam)
 
 
 
