@@ -1,30 +1,47 @@
 import math
 import random
-import support
-import SingleServer
  
 # Random variable library for generating random variables
-import numpy
+#import numpy
 
 # Global Variables:
 
 # Current time variable
-float t
+t = 0.0
 
 # Time of arrival/deparatures
-float ta, td1, td2, td3, td4
+ta = 0.0
+td1 = 0.0
+td2 = 0.0
+td3 = 0.0
+td4 = 0.0
 
 # Closing time variable
-float tc
+tc = 100.0
 
+# Initialize line lists
 # Line lists will contain customers represented by an integer number of items in cart
-list line1, line2, line3, line4
+line1 = list()
+line2 = list()
+line3 = list()
+line4 = list()
 
-# State Variables
-int n1, n2, n3, n4
+# Initialize State Variables
+n1 = 0
+n2 = 0
+n3 = 0 
+n4 = 0
 
 # Total number of customer arrivals throughout the day
-int totalArrivals
+totalArrivals = 0
+
+# Initialize r.v. generation parameters
+
+# Arrival time parameter
+lam = 0.5
+
+# Cart size parameter
+cartSizeLam = 0.5
 
 # Generates arrival time, along with number of items in cart
 def generateArrivalTime(lam):
@@ -33,7 +50,7 @@ def generateArrivalTime(lam):
 	totalArrivals += 1
 
 #Parker
-def generateDepartureTime():
+#def generateDepartureTime():
 	# If customer is at the front of the line -> generate departure time using weibull dist.
 
 def updateTime(eventTime):
@@ -53,8 +70,14 @@ def getItemsInCart(line):
 # Should return an integer
 def generateItemsInCart():
 
+	# Generate uniform random variable
+	u = random.random()
+
+	# Returns number of items in cart 
+	return math.ceil(40*(-cartSizeLam)*math.log(1 - u))
+
 #Eric
-def getEstimatedLineSize(line):
+#def getEstimatedLineSize(line):
 	# Returns line (which is a list)
 
 # Returns shortest estimated line
@@ -82,7 +105,7 @@ def getNextLaneDeparture():
 	elif (getNextDepartureTime() == td3):
 		return line3
 	else:
-		returh line4
+		return line4
 
 # Adds customer with specified properties to a line list
 def addCustomerToLine(customer, line):
@@ -127,7 +150,7 @@ def runSimulation():
 				# update state variable for number of people in this line (?)
 
 		# Case 6 (Next departure happens after closing and at least one customer is still in line)
-		elif ((tc < getNextDepartureTime() and (n1 + n2 + n3 + n4) != 0):
+		elif ((tc < getNextDepartureTime()) and (n1 + n2 + n3 + n4) != 0):
 
 			# Update current time by earliest departure time
 			updateTime(getNextDepartureTime()) 
@@ -144,6 +167,8 @@ def runSimulation():
 
 			# End the loop
 			break
+
+print generateItemsInCart()
 
 
 
