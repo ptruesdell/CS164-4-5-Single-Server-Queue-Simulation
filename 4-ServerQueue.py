@@ -9,12 +9,21 @@ import random
 # Current time variable
 t = 0.0
 
-# Time of arrival/deparatures
+# Arrival Time
 ta = 0.0
+
+# Departure times for 4-server
 td1 = 0.0
 td2 = 0.0
 td3 = 0.0
 td4 = 0.0
+
+# Deparature times for 5-server
+t5d1 = 0.0
+t5d2 = 0.0
+t5d3 = 0.0
+t5d4 = 0.0
+t5d5 = 0.0
 
 # Closing time variable
 tc = 100.0
@@ -31,6 +40,7 @@ n1 = 0
 n2 = 0
 n3 = 0 
 n4 = 0
+
 
 # Total number of customer arrivals throughout the day
 totalArrivals = 0
@@ -82,15 +92,30 @@ def generateItemsInCart():
 
 # Returns shortest estimated line
 # Return value is the line that the customer chooses
-def chooseLine():
-	if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line1:
-		return line1
-	elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line2:
-		return line2
-	elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line3:
-		return line3
-	else: 
-		return line4
+def chooseLine(numItems):
+	# Case 1 (Customer is allowed to use express lane): 
+	if (numItems > 10):
+		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line1:
+			return line1
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line2:
+			return line2
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line3:
+			return line3
+		else: 
+			return line4
+	# Case 2 (Customer is not allowed to use express lane):
+	else:
+		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line1:
+			return line1
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line2:
+			return line2
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line3:
+			return line3
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line4:
+			return line4
+		else: 
+			return line5
+
 
 # Returns the soonest deparature time among all the lines
 def getNextDepartureTime():
