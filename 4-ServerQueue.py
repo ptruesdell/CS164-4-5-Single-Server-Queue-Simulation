@@ -87,7 +87,7 @@ def generateItemsInCart():
 	return math.ceil(40*(-cartSizeLam)*math.log(1 - u))
 
 #Eric
-#def getEstimatedLineSize(line):
+def getEstimatedWaitTime(line):
 	# Returns line (which is a list)
 
 # Returns shortest estimated line
@@ -95,23 +95,23 @@ def generateItemsInCart():
 def chooseLine(numItems):
 	# Case 1 (Customer is allowed to use express lane): 
 	if (numItems > 15):
-		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == getEstimatedLineSize(line1):
+		if min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line1):
 			return line1
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == getEstimatedLineSize(line2):
+		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line2):
 			return line2
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == getEstimatedLineSize(line3):
+		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line3):
 			return line3
 		else: 
 			return line4
 	# Case 2 (Customer is not allowed to use express lane):
 	else:
-		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line1):
+		if min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line1):
 			return line1
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line2):
+		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line2):
 			return line2
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line3):
+		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line3):
 			return line3
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line4):
+		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line4):
 			return line4
 		else: 
 			return line5
