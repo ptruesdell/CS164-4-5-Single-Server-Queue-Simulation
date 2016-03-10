@@ -94,24 +94,24 @@ def generateItemsInCart():
 # Return value is the line that the customer chooses
 def chooseLine(numItems):
 	# Case 1 (Customer is allowed to use express lane): 
-	if (numItems > 10):
-		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line1:
+	if (numItems > 15):
+		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == getEstimatedLineSize(line1):
 			return line1
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line2:
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == getEstimatedLineSize(line2):
 			return line2
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == line3:
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4)) == getEstimatedLineSize(line3):
 			return line3
 		else: 
 			return line4
 	# Case 2 (Customer is not allowed to use express lane):
 	else:
-		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line1:
+		if min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line1):
 			return line1
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line2:
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line2):
 			return line2
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line3:
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line3):
 			return line3
-		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == line4:
+		elif min(getEstimatedLineSize(line1), getEstimatedLineSize(line2), getEstimatedLineSize(line3), getEstimatedLineSize(line4), getEstimatedLineSize(line5)) == getEstimatedLineSize(line4):
 			return line4
 		else: 
 			return line5
