@@ -9,8 +9,11 @@ import random
 # Current time variable
 t = 0.0
 
-# Arrival Time
-ta = 0.0
+# Initialize first arrival time
+ta = generateArrivalTime()
+
+# Time of line switch
+ts = 0.0
 
 # Departure times for 4-server
 td1 = 0.0
@@ -56,12 +59,13 @@ cartSizeLam = 0.5
 # Generates arrival time, along with number of items in cart
 def generateArrivalTime(lam):
 	# Non-homogenous Poisson distribution
-	ta = numpy.random.poisson(lam, 10000)
+	ta = t + numpy.random.poisson(lam, 10000)
 	totalArrivals += 1
 
 #Parker
 #def generateDepartureTime():
 	# If customer is at the front of the line -> generate departure time using weibull dist.
+	# 
 
 def updateTime(eventTime):
 	# Adds event time to current time
@@ -121,17 +125,6 @@ def chooseLine(numItems):
 def getNextDepartureTime():
 	return min(td1, td2, td3, td4)
 
-# Returns line with earliest departure time
-def getNextLaneDeparture():
-	if (getNextDepartureTime() == td1):
-		return line1
-	elif (getNextDepartureTime() == td2):
-		return line2
-	elif (getNextDepartureTime() == td3):
-		return line3
-	else:
-		return line4
-
 # Adds customer with specified properties to a line list
 def addCustomerToLine(customer, line):
 	line.push(customer)
@@ -144,14 +137,23 @@ def addCustomerToLine(customer, line):
 	else:
 		n4 += 1
 
+# Returns time of next event
+def getNextEvent():
+	return min(ta, ts, td1, td2, td3, td4, td5)
+
+def getLongestLine():
+	return max(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
+
+getShortestLine():
+
 # Main loop
 def runSimulation():
 	while (True):
 		# Case 1 (Arrival ocurrs before departure from any line and before closing):
-		if ((ta <= getNextDepartureTime()) and (ta < tc)):
+		if (getNextEvent() == ta and ta < tc):
 
 			# Update current time by time of arrival
-			updateTime(ta)
+			t = ta
 
 			# Increment total arrivals by 1
 			totalArrivals += 1
@@ -163,16 +165,56 @@ def runSimulation():
 			ta = generateArrivalTime()
 
 		# Cases 2-5 (Departure from one of the lines ocurrs before new arrival and before closing):
-		elif ((getNextDepartureTime() < ta) and (getNextDepartureTime() < tc)):
+		elif (getNextEvent() == td1 and td1 < tc):
 
 			# Update current time by earliest deparature time
-			updateTime(getNextDepartureTime())
+			t = td1
 
 			# Remove departed customer from line with earliest departure time
-			getNextLaneDeparture().pop()
+			line1.pop()
+
+
 
 			# TODO:
 				# update state variable for number of people in this line (?)
+
+		elif (getNextEvent() == td2 and td2 < tc):
+
+			# Update current time by earliest deparature time
+			t = td2
+
+			# Remove departed customer from line with earliest departure time
+			line2.pop()
+
+			# TODO:
+				# update state variable for number of people in this line (?)
+
+		elif (getNextEvent() == td3 and td3 < tc):
+
+			# Update current time by earliest deparature time
+			t = td3
+
+			# Remove departed customer from line with earliest departure time
+			line3.pop()
+
+			# TODO:
+				# update state variable for number of people in this line (?)
+
+		elif (getNextEvent() == td4 and td4 < tc):
+
+			# Update current time by earliest deparature time
+			t = td4
+
+			# Remove departed customer from line with earliest departure time
+			line4.pop()
+
+			td4
+
+			# TODO:
+				# update state variable for number of people in this line (?)
+
+
+		elif (ts < ta) and ts < getNextDepartureTime
 
 		# Case 6 (Next departure happens after closing and at least one customer is still in line)
 		elif ((tc < getNextDepartureTime()) and (n1 + n2 + n3 + n4) != 0):
