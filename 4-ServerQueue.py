@@ -43,13 +43,16 @@ totalArrivals = 0
 lam = 0.5
 
 # Departure time parameters
-alpha = 0.5
-beta = 1.0
+alpha = 0.9
+beta = 1.3
 
 # Cart size parameter
 cartSizeLam = 0.5
 
 switchLam = 0.8
+
+# Logging variables for analysis
+maxLineLengthLogger = 0
 
 # Generates arrival time, along with number of items in cart
 def generateArrivalTime():
@@ -129,6 +132,7 @@ def getLongestLine():
 def getShortestLine():
     return min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
 
+#
 def getShortestLineSwitch(line):
 	return min(getEstimatedWaitTime(line), getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
 
@@ -155,7 +159,7 @@ def runSimulation():
 	global t, ta, td1, td2, td3, td4, ts, tc
 	global line1, line2, line3, line4
 	global totalArrivals, lam, cartSizeLam
-	global test
+	global maxLineLengthLogger
 
 	# Initialize first arrival time
 	ta = generateArrivalTime()
@@ -275,25 +279,17 @@ def runSimulation():
 			else: 
 				td4 = a_jillion
 
-		#elif (getNextEvent() == ts and ts < tc):
-			#return
-
-		# Log arrivals/remaining
-		printDepartureTimes()
-		print "Arrival Time:", ta
-		print "Total Arrivals", totalArrivals
-		print "# of remaining customers:", (len(line1) + len(line2) + len(line3) + len(line4))
-		print "Line 1:", line1
-		print "Line 2:", line2
-		print "Line 3:", line3
-		print "Line 4:", line4
-
 	ta = a_jillion
+	# Keeps track of the longest line size throughout the simulation
+	if (max(len(line1), len(line2), len(line3), len(line4)) > maxLineLengthLogger):
+		maxLineLengthLogger = max(len(line1), len(line2), len(line3), len(line4))
 
+	# Case 6 (Line switch):
+		
+
+	# Case 7 (Next departure happens after closing and at least one customer is still in line)
+	# Loop runs only past closing time when there are customers still in line
 	while (len(line1) + len(line2) + len(line3) + len(line4) > 0):
-
-		# Case 7 (Next departure happens after closing and at least one customer is still in line)
-
 		if (getNextEvent() == td1 and len(line1) >= 1):
 			t = td1
 			line1.pop(0)
@@ -336,17 +332,70 @@ def runSimulation():
 			else:
 				td4 = a_jillion
 
+		# Log arrivals/remaining
+		printDepartureTimes()
+		print "Arrival Time:", ta
+		print "Total Arrivals", totalArrivals
+		print "# of remaining customers:", (len(line1) + len(line2) + len(line3) + len(line4))
+		print "Line 1:", line1
+		print "Line 2:", line2
+		print "Line 3:", line3
+		print "Line 4:", line4
+
+	# Log time, total arrivals, and # customers remaining at end of simulation
 	printTime()
 	print "Total arrivals for the day:", totalArrivals
 	print "# of remaining customers:", (len(line1) + len(line2) + len(line3) + len(line4))
-
-
-	# print any other necessary data
-	# End the loop
-
+	print "Longest line length:", maxLineLengthLogger
 
 runSimulation()
 
+
+'''elif (getNextEvent() == ts and ts < tc):
+
+			t = ts
+   			ts = generateSwitchTime()
+
+  			# Set longest line
+ 			maxLineSize = max(len(line1), len(line2), len(line3), len(line4))
+			   
+			if (maxLineLength == len(line1)):
+				longestLine = line1
+  
+			elif (maxLineLength == len(line2)):
+				longestLine = line2
+
+			elif (maxLineLength == len(line3)):			   
+			    longestLine = line3
+
+			else:
+			    longestLine = line4
+
+			lastInLineIndex = longestLine[maxLineSize - 1]
+
+			# Remove last person from longest line   
+			longestLine.pop()
+		  
+			if (cmp(longestLine, getShortestLineSwitch(longestLine)) == False):
+			   
+			    if (len(getShortestLineSwitch(longestLine)) == 0):
+			    
+				    if (cmp(line1, getShortestLineSwitch(longestLine)) == True):			     
+				        td1 = generateDepartureTime()
+
+				     
+				    elif (cmp(line2, getShortestLineSwitch(longestLine)) == True):
+						td2 = generateDepartureTime()
+
+				       
+				    elif (cmp(line3, getShortestLineSwitch(longestLine)) == True):
+				        td3 = generateDepartureTime()
+
+				       
+				    elif (cmp(line4, getShortestLineSwitch(longestLine)) == True):
+				    	td4 = generateDepartureTime()
+
+			 getShortestLineSwitch(longestLine).push(lastInLineIndex)'''
 
 
 
