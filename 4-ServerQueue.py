@@ -338,7 +338,8 @@ def runSimulation():
 					    elif (cmp(line4, getShortestLineSwitch(longestLine)) == True):
 					    	td4 = generateDepartureTime()
 				    # Put the person into their new line
-				    getShortestLineSwitch(longestLine).push(lastInLineIndex)
+				    getShortestLineSwitch(longestLine).append(lastInLineIndex)
+
 				else: # If switching lines would not be beneficial (shortest line is theirs without them)
 				
 				    if (previousLine == 1):			#if they came from line 1
@@ -448,7 +449,7 @@ def runSimulation():
 					      	td1 = generateDepartureTime()
 					     
 					    elif (cmp(line2, getShortestLineSwitch(longestLine)) == True):
-						td2 = generateDepartureTime()
+							td2 = generateDepartureTime()
 					       
 					    elif (cmp(line3, getShortestLineSwitch(longestLine)) == True):
 					        td3 = generateDepartureTime()
@@ -456,7 +457,7 @@ def runSimulation():
 					    elif (cmp(line4, getShortestLineSwitch(longestLine)) == True):
 					    	td4 = generateDepartureTime()
 				    # Put the person into their new line
-				    getShortestLineSwitch(longestLine).push(lastInLineIndex)
+				    getShortestLineSwitch(longestLine).append(lastInLineIndex)
 
 				else: # If switching lines would not be beneficial (shortest line is theirs without them)
 				
