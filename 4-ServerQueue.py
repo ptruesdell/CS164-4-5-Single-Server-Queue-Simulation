@@ -98,7 +98,6 @@ def generateItemsInCart():
 
 #Eric
 def getEstimatedWaitTime(line):
-	# Returns line (which is a list)
 	sum = 0
 	i = 0
 	for i in range(len(line) - 1):
@@ -141,13 +140,13 @@ def printNextEvent():
 
 
 def getLongestLine():
+
+	global line1, line2, line3, line4
 	return max(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
 
-def getShortestLine():
-    return min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
-
-#
 def getShortestLineSwitch(line):
+
+	global line1, line2, line3, line4
 	return min(getEstimatedWaitTime(line), getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
 
 def printTime():
@@ -295,50 +294,67 @@ def runSimulation():
 		    t = ts
     		# Generate next switch time
    		    ts = generateSwitchTime()
-  		    # Set longest line
- 		    maxLineLength = max(len(line1), len(line2), len(line3), len(line4))
-			
-		    # The max line must be greater than 1 to switch
-		    if (maxLineLength > 1):
-   
+
+   		    # The max line must be greater than 1 to switch
+		    if ((max(len(line1), len(line2), len(line3), len(line4))) > 1):
+
 				# Make temporary line of longest line and find the items of last person
-				if (maxLineLength == len(line1)):
+				if (getLongestLine() == getEstimatedWaitTime(line1)):
 				    lastInLineIndex = line1[len(line1) - 1]	# Get last person's items
-				    line1.pop()					# Remove them from the line
-				    longestLine = list(line1)			# Copy the line
-				    previousLine = 1				# Save line number for later to reinsert them in line if not beneficial
-				elif (maxLineLength == len(line2)):
+				    line1.pop()								# Remove them from the line
+				    print "pop 1"
+				    longestLine = list(line1)				# Copy the line
+				    previousLine = 1						# Save line number for later to reinsert them in line if not beneficial
+				elif (getLongestLine() == getEstimatedWaitTime(line2)):
 				    lastInLineIndex = line2[len(line2) - 1]
 				    line2.pop()
+				    print "pop 2"
 				    longestLine = list(line2)
 				    previousLine = 2
-				elif (maxLineLength == len(line3)):
+				elif (getLongestLine() == getEstimatedWaitTime(line3)):
 				    lastInLineIndex = line3[len(line3) - 1]
-				    line3.pop()			   
+				    line3.pop()		
+				    print "pop 3"	   
 				    longestLine = list(line3)
 				    previousLine = 3
 				else:
 				    lastInLineIndex = line4[len(line4) - 1]
 				    line4.pop()
+				    print "pop 4"
 				    longestLine = list(line4)
 				    previousLine = 4
-				if (cmp(longestLine, getShortestLineSwitch(longestLine)) == False):		#if (longest line without last person) is NOT (the shortest line)
-				   
-				    if (len(getShortestLineSwitch(longestLine)) == 0):				#and there is nobody in the new line
-				    
-					    if (cmp(line1, getShortestLineSwitch(longestLine)) == True):	#Generate new departure time for new line		     
-					      	td1 = generateDepartureTime()
-					     
-					    elif (cmp(line2, getShortestLineSwitch(longestLine)) == True):
-							td2 = generateDepartureTime()
-					       
-					    elif (cmp(line3, getShortestLineSwitch(longestLine)) == True):
-					        td3 = generateDepartureTime()
-					       
-					    elif (cmp(line4, getShortestLineSwitch(longestLine)) == True):
-					    	td4 = generateDepartureTime()
-				    # Put the person into their new line
-				    getShortestLineSwitch(longestLine).append(lastInLineIndex)
+
+				if (getEstimatedWaitTime(longestLine) != getShortestLineSwitch(longestLine)):		#if (longest line without last person) is NOT (the shortest line)
+
+					if (getShortestLineSwitch(longestLine) == 0):				#and there is nobody in the new line
+
+						if(getEstimatedWaitTime(line1) == 0):	#Generate new departure time for new line		     
+							td1 = generateDepartureTime()
+							line1.append(lastInLineIndex)
+						elif(getEstimatedWaitTime(line2) == 0):
+							td2 = generateDepartureTime() 
+							line2.append(lastInLineIndex)
+						elif(getEstimatedWaitTime(line3) == 0):
+							td3 = generateDepartureTime()
+							line3.append(lastInLineIndex)
+						else:
+							td4 = generateDepartureTime()
+							line4.append(lastInLineIndex)
+
+					elif((getEstimatedWaitTime(line1)) == (getShortestLineSwitch(longestLine))):
+
+						line1.append(lastInLineIndex)
+
+					elif(getEstimatedWaitTime(line2) == getShortestLineSwitch(longestLine)):
+
+						line2.append(lastInLineIndex)
+
+					elif(getEstimatedWaitTime(line3) == getShortestLineSwitch(longestLine)):
+
+						line3.append(lastInLineIndex)
+
+					else:
+						line4.append(lastInLineIndex)
 
 				else: # If switching lines would not be beneficial (shortest line is theirs without them)
 				
