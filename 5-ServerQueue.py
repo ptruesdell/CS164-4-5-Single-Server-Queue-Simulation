@@ -430,8 +430,8 @@ def runSimulation():
 						line3.append(lastInLineIndex)
 				    elif (previousLine == 4):
 						line4.append(lastInLineIndex)
-					elif (previousLine == 5):
-						line5.append(lastInLineIndex)
+				    elif (previousLine == 5):
+					    line5.append(lastInLineIndex)
 
 		print "------------------------------"
 		print "Line 1:", line1
@@ -601,8 +601,8 @@ def runSimulation():
 						line3.append(lastInLineIndex)
 				    elif (previousLine == 4):
 						line4.append(lastInLineIndex)
-					elif (previousLine == 5):
-						line5.append(lastInLineIndex)
+				    elif (previousLine == 5):
+					    line5.append(lastInLineIndex)
 
 	# Log arrivals/remaining
 		printTime()
