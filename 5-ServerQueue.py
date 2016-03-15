@@ -161,21 +161,32 @@ def getLongestLine():
 	global line1, line2, line3, line4, line5
 	return max(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5))
 
-def getShortestLineSwitch():
+def getShortestLineSwitch(numItems):
 
 	global line1, line2, line3, line4
 
-	short = min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5))
-	if (short == getEstimatedWaitTime(line1)):
-		return line1
-	elif (short == getEstimatedWaitTime(line2)):
-		return line2
-	elif (short == getEstimatedWaitTime(line3)):
-		return line3
-	elif (short == getEstimatedWaitTime(line4)):
-		return line4
-	elif (short == getEstimatedWaitTime(line5)):
-		return line5
+	if (numItems > 10):
+		short = min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
+		if (short == getEstimatedWaitTime(line1)):
+			return line1
+		elif (short == getEstimatedWaitTime(line2)):
+			return line2
+		elif (short == getEstimatedWaitTime(line3)):
+			return line3
+		elif (short == getEstimatedWaitTime(line4)):
+			return line4
+	else:
+		short = min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5))
+		if (short == getEstimatedWaitTime(line1)):
+			return line1
+		elif (short == getEstimatedWaitTime(line2)):
+			return line2
+		elif (short == getEstimatedWaitTime(line3)):
+			return line3
+		elif (short == getEstimatedWaitTime(line4)):
+			return line4
+		elif (short == getEstimatedWaitTime(line5)):
+			return line5
 
 def printTime():
 	global t
@@ -397,9 +408,9 @@ def runSimulation():
 				    previousLine = 5
 				    print getEstimatedWaitTime(longestLine)
 
-				if (longestLine != getShortestLineSwitch()):		#if (longest line without last person) is NOT (the shortest line)
+				if (longestLine != getShortestLineSwitch(lastInLineIndex)):		#if (longest line without last person) is NOT (the shortest line)
 
-					if (len(getShortestLineSwitch()) == 0):				#and there is nobody in the new line
+					if (len(getShortestLineSwitch(lastInLineIndex)) == 0):				#and there is nobody in the new line
 
 						if(len(line1) == 0):	#Generate new departure time for new line		     
 							td1 = generateDepartureTime()
@@ -417,23 +428,23 @@ def runSimulation():
 							td5 = generateDepartureTime()
 							line5.append(lastInLineIndex)
 
-					elif(line1 == getShortestLineSwitch()):
+					elif(line1 == getShortestLineSwitch(lastInLineIndex)):
 
 						line1.append(lastInLineIndex)
 
-					elif(line2 == getShortestLineSwitch()):
+					elif(line2 == getShortestLineSwitch(lastInLineIndex)):
 
 						line2.append(lastInLineIndex)
 
-					elif(line3 == getShortestLineSwitch()):
+					elif(line3 == getShortestLineSwitch(lastInLineIndex)):
 
 						line3.append(lastInLineIndex)
 
-					elif(line4 == getShortestLineSwitch()):
+					elif(line4 == getShortestLineSwitch(lastInLineIndex)):
 
 						line4.append(lastInLineIndex)
 
-					elif(line5 == getShortestLineSwitch()):
+					elif(line5 == getShortestLineSwitch(lastInLineIndex)):
 
 						line5.append(lastInLineIndex)
 
@@ -562,9 +573,9 @@ def runSimulation():
 				    previousLine = 5
 				    print getEstimatedWaitTime(longestLine)
 
-				if (longestLine != getShortestLineSwitch()):		#if (longest line without last person) is NOT (the shortest line)
+				if (longestLine != getShortestLineSwitch(lastInLineIndex)):		#if (longest line without last person) is NOT (the shortest line)
 
-					if (len(getShortestLineSwitch()) == 0):			#and there is nobody in the new line
+					if (len(getShortestLineSwitch(lastInLineIndex)) == 0):			#and there is nobody in the new line
 
 						if(len(line1) == 0):						#Generate new departure time for new line		     
 							td1 = generateDepartureTime()
@@ -582,23 +593,23 @@ def runSimulation():
 							td5 = generateDepartureTime()
 							line5.append(lastInLineIndex)
 
-					elif(line1 == getShortestLineSwitch()):
+					elif(line1 == getShortestLineSwitch(lastInLineIndex)):
 
 						line1.append(lastInLineIndex)
 
-					elif(line2 == getShortestLineSwitch()):
+					elif(line2 == getShortestLineSwitch(lastInLineIndex)):
 
 						line2.append(lastInLineIndex)
 
-					elif(line3 == getShortestLineSwitch()):
+					elif(line3 == getShortestLineSwitch(lastInLineIndex)):
 
 						line3.append(lastInLineIndex)
 
-					elif(line4 == getShortestLineSwitch()):
+					elif(line4 == getShortestLineSwitch(lastInLineIndex)):
 
 						line4.append(lastInLineIndex)
 
-					elif(line5 == getShortestLineSwitch()):
+					elif(line5 == getShortestLineSwitch(lastInLineIndex)):
 
 						line5.append(lastInLineIndex)
 
