@@ -118,48 +118,54 @@ def chooseLine(numItems):
 
 	if (numItems <= 10):
 		if min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line1):
-			print "Line 1 chosen"
 			return 1
 		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line2):
-			print "Line 2 chosen"
 			return 2
 		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line3):
-			"Line 3 chosen"
 			return 3
 		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5)) == getEstimatedWaitTime(line4):
-			print "Line 4 chosen"
 			return 4
 		else:
-			print "Line 5 Chosen"
 			return 5
 	else: 
 		if min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line1):
-			print "Line 1 chosen"
 			return 1
 		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line2):
-			print "Line 2 chosen"
 			return 2
 		elif min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4)) == getEstimatedWaitTime(line3):
-			"Line 3 chosen"
 			return 3
 		else:
-			print "Line 4 chosen"
 			return 4
 
 def getNextEvent():
 	global ta, td1, td2, td3, td4, td5, ts
 	return min(ta, td1, td2, td3, td4, td5, ts)
 
+def printNextEvent():
+	global ta, td1, td2, td3, td4, ts
+	if (getNextEvent() == ta):
+		print "Next event is an ARRIVAL at:", ta
+	elif (getNextEvent() == td1):
+		print "Next event is a DEPARTURE from line 1 at:", td1
+	elif (getNextEvent() == td2):
+		print "Next event is a DEPARTURE from line 2 at:", td2
+	elif (getNextEvent() == td3):
+		print "Next event is a DEPARTURE from line 3 at:", td3
+	elif (getNextEvent() == td4):
+		print "Next event is a DEPARTURE from line 4 at:", td4
+	elif (getNextEvent() == ts):
+		print "Next event is a lane SWITCH at:", ts
+
 def getLongestLine():
 
-	global line1, line2, line3, line4
-	return max(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
+	global line1, line2, line3, line4, line5
+	return max(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5))
 
 def getShortestLineSwitch():
 
 	global line1, line2, line3, line4
 
-	short = min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4))
+	short = min(getEstimatedWaitTime(line1), getEstimatedWaitTime(line2), getEstimatedWaitTime(line3), getEstimatedWaitTime(line4), getEstimatedWaitTime(line5))
 	if (short == getEstimatedWaitTime(line1)):
 		return line1
 	elif (short == getEstimatedWaitTime(line2)):
@@ -177,18 +183,25 @@ def printTime():
 
 def printNumCustomersInLine():
 	global line1, line2, line3, line4
+	print "------------------------------"
 	print "# of customers in line 1:", len(line1)
 	print "# of customers in line 2:", len(line2)
 	print "# of customers in line 3:", len(line3)
 	print "# of customers in line 4:", len(line4)
 	print "# of customers in line 5:", len(line5)
+	print "------------------------------"
 
 def printDepartureTimes():
-	print "Line 1 Departure Time:", td1
-	print "Line 2 Departure Time:", td2
-	print "Line 3 Departure Time:", td3
-	print "Line 4 Departure Time:", td4
-	print "Line 5 Departure Time:", td5	
+	if (td1 < a_jillion):
+		print "Line 1 Departure Time:", td1
+	if (td2 < a_jillion):
+		print "Line 2 Departure Time:", td2
+	if (td3 < a_jillion):
+		print "Line 3 Departure Time:", td3
+	if (td4 < a_jillion):
+		print "Line 4 Departure Time:", td4
+	if (td5 < a_jillion):
+		print "Line 5 Departure Time:", td5
 
 # Main loop
 def runSimulation():
@@ -202,6 +215,10 @@ def runSimulation():
 	ta = generateArrivalTime()
 
 	while (getNextEvent() < tc):
+		# Log current time and time of next event
+		printTime()
+		printNextEvent()
+
 		# Case 1 (Arrival occurs before departure from any line and before closing):
 		if (getNextEvent() == ta and ta < tc):
 
@@ -450,12 +467,15 @@ def runSimulation():
 
 	while (len(line1) + len(line2) + len(line3) + len(line4) + len(line5) > 0):
 
+		# Log current time and time of next event
+		printTime()
+		printNextEvent()
+
 		# Case 7 (Next departure happens after closing and at least one customer is still in line)
 
 		if (getNextEvent() == td1 and len(line1) >= 1):
 			t = td1
 			line1.pop(0)
-			print "line 1 departure:", td1
 			printNumCustomersInLine()
 			if (len(line1) > 0):
 				td1 = generateDepartureTime()
@@ -466,7 +486,6 @@ def runSimulation():
 		elif (getNextEvent() == td2 and len(line2) >= 1):
 			t = td2
 			line2.pop(0)
-			print "line 2 departure:", td2
 			printNumCustomersInLine()
 			if (len(line2) > 0):
 				td2 = generateDepartureTime()
@@ -476,7 +495,6 @@ def runSimulation():
 		elif (getNextEvent() == td3 and len(line3) >= 1):
 			t = td3
 			line3.pop(0)
-			print "line 3 departure:", td3
 			print printNumCustomersInLine()
 			if (len(line3) > 0):
 				td3 = generateDepartureTime()
@@ -487,7 +505,6 @@ def runSimulation():
 		elif (getNextEvent() == td4 and len(line4) >= 1):
 			t = td4
 			line4.pop(0)
-			print "line 4 departure:", td4
 			print printNumCustomersInLine()
 			if (len(line4) > 0):
 				td4 = generateDepartureTime()
@@ -497,7 +514,6 @@ def runSimulation():
 		elif (getNextEvent() == td5 and len(line5) >= 1):
 			t = td5
 			line5.pop(0)
-			print "line 5 departure:", td5
 			print printNumCustomersInLine()
 			if (len(line5) > 0):
 				td5 = generateDepartureTime()
@@ -518,35 +534,30 @@ def runSimulation():
 				if (getLongestLine() == getEstimatedWaitTime(line1)):
 				    lastInLineIndex = line1[len(line1) - 1]	# Get last person's items
 				    line1.pop()								# Remove them from the line
-				    print "Line 1 is the longest"
 				    longestLine = list(line1)				# Copy the line
 				    previousLine = 1						# Save line number for later to reinsert them in line if not beneficial
 				    print getEstimatedWaitTime(longestLine)
 				elif (getLongestLine() == getEstimatedWaitTime(line2)):
 				    lastInLineIndex = line2[len(line2) - 1]
 				    line2.pop()
-				    print "Line 2 is the longest"
 				    longestLine = list(line2)
 				    previousLine = 2
 				    print getEstimatedWaitTime(longestLine)
 				elif (getLongestLine() == getEstimatedWaitTime(line3)):
 				    lastInLineIndex = line3[len(line3) - 1]
 				    line3.pop()		
-				    print "Line 3 is the longest"	   
 				    longestLine = list(line3)
 				    previousLine = 3
 				    print getEstimatedWaitTime(longestLine)
 				elif (getLongestLine() == getEstimatedWaitTime(line4)):
 				    lastInLineIndex = line4[len(line4) - 1]
 				    line4.pop()
-				    print "Line 4 is the longest"
 				    longestLine = list(line4)
 				    previousLine = 4
 				    print getEstimatedWaitTime(longestLine)
 				elif (getLongestLine() == getEstimatedWaitTime(line5)):
 				    lastInLineIndex = line5[len(line5) - 1]
 				    line5.pop()
-				    print "Line 5 is the longest"
 				    longestLine = list(line5)
 				    previousLine = 5
 				    print getEstimatedWaitTime(longestLine)
